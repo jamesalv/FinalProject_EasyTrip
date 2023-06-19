@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trip Planning - EasyTrip</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" href="../CSS/travel_plan.css" />
+
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"
+    />
+  </head>
+  <body>
+    <!-- Templates -->
+    <div id="template">
+      <!-- Itinerary Card Template -->
+      <div class="itinerary-card">
+        <div class="marker">
+          <i class="fas fa-location-pin"></i>
+          <span class="num">1</span>
+        </div>
+        <div class="itinerary-card-info">
+          <h3>Nusa Penida</h3>
+          <textarea
+            name="text"
+            rows="14"
+            cols="10"
+            wrap="soft"
+            placeholder="Add notes here"
+          ></textarea>
+          <div class="card-utils">
+            <div
+              class="add-time utils"
+              onclick="openSetTimeOverlay(this.parentElement.parentElement)"
+            >
+              <i class="far fa-clock"></i>
+              <span>Set Time</span>
+            </div>
+            <div
+              class="add-expense utils"
+              onclick="openExpenseOverlay(this.parentElement.parentElement)"
+            >
+              <i class="far fa-money-bill-alt"></i>
+              <span>Set Expense</span>
+            </div>
+          </div>
+        </div>
+        <img src="../assets/img/penida.jpeg" alt="" />
+        <!-- Delete Button -->
+        <div class="delete-btn">
+          <i class="fas fa-trash-alt"></i>
+        </div>
+      </div>
+
+      <!-- Itinerary Separator Template -->
+      <div class="card-separator">
+        <i class="fas fa-car-alt"></i>
+        <div class="vl"></div>
+        <p class="duration">30 min</p>
+        <i class="fas fa-circle"></i>
+        <p class="distance">12km</p>
+      </div>
+    </div>
+
+    <!-- Topbar -->
+    <div class="topbar">
+      <div class="logo-img">
+        <img src="../assets/img/Logo.svg" alt="" />
+      </div>
+      <div class="topbar-menus">
+        <div class="share">
+          <button>
+            <i class="fas fa-share-alt"></i>
+            <span>Share</span>
+          </button>
+        </div>
+        <div class="options">
+          <button>
+            <i class="fas fa-cog"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="flex-container">
+      <!-- Sidebar -->
+      <nav class="sidebar">
+        <ul>
+          <li>
+            <a href="#auto-planner" class = "nav-btn" onclick="showAutoPlanner(event)">
+              <i class="fas fa-wand-magic-sparkles"></i>
+              <span class="nav-item">AutoPlanner</span>
+            </a>
+          </li>
+          <li class="explore-btn nav-active nav-btn">
+            <a href="#explore" onclick="scrollToDiv(event)">
+              <i class="fa-regular fa-compass"></i>
+              <span class="nav-item">Explore</span>
+            </a>
+          </li>
+          <li class="itinerary-btn nav-btn">
+            <a href="#itinerary" onclick="scrollToDiv(event)">
+              <i class="fas fa-map-location-dot"></i>
+              <span class="nav-item">Itinerary</span>
+              <i class="fa-solid fa-caret-down dropdown"></i>
+            </a>
+          </li>
+          <li class="budget-btn nav-btn">
+            <a href="#budget" onclick="scrollToDiv(event)">
+              <i class="fa-solid fa-money-bill-wave"></i>
+              <span class="nav-item">Budgeting</span>
+              <i class="fa-solid fa-caret-down dropdown"></i>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Main Content -->
+      <!-- Auto Planner -->
+      <div class="main">
+        <div id="auto-planner">
+          <div id="chat-box">
+            <div class="message-row-bot">
+              <div class="chatbot message">
+                <div class="chatbot-icon message-icon">
+                  <i class="fas fa-robot"></i>
+                </div>
+                <div class="bot-message message-content">
+                  <p>Hi, How Can i Help You?</p>
+                </div>
+              </div>
+            </div>
+            <div class="message-row-user">
+              <div class="user-log message">
+                <div class="user-message message-content">
+                  <p>
+                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                    Officiis eum dolores nisi magnam nemo enim adipisci amet ad
+                    iure animi!
+                  </p>
+                </div>
+                <div class="user-icon message-icon">
+                  <img src="../assets/img/bang-musk.jpg" alt="" srcset="" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="user-message-input">
+            <input
+              type="text"
+              id="user-input"
+              placeholder="Type your message here..."
+            />
+            <button id="send-btn">
+              <i class="fas fa-paper-plane"></i>
+            </button>
+          </div>
+        </div>
+        <!-- Header -->
+        <div class="header-container">
+          <img src="../assets/img/bali-head.jpg" alt="" class="header-img" />
+          <div class="header-content">
+            <h1>Trip to <span id="trip-name">Bali</span></h1>
+            <div class="trip-info">
+              <div class="date-info">
+                <i class="fa-regular fa-calendar-alt"></i>
+                <span id="trip-date">4/1 - 4/2</span>
+              </div>
+              <div class="person">
+                <i class="fa-regular fa-user"></i>
+                <span id="trip-person">2 Adults</span>
+              </div>
+            </div>
+            <div class="user">
+              <div class="icon-row">
+                <img
+                  src="../assets/img/bang-musk.jpg"
+                  alt="account-icon"
+                  class="account-icon"
+                />
+                <img
+                  src="../assets/img/account-icon.jpg"
+                  alt="account-icon"
+                  class="account-icon"
+                />
+              </div>
+              <i class="fas fa-user-plus"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Explore -->
+        <div class="main-padding" id="explore">
+          <div class="explore-header">
+            <h1>Explore</h1>
+            <button class="find-more-btn">
+              <i class="fas fa-search"></i>
+              <span>Find More</span>
+            </button>
+          </div>
+          <div class="carousel-wrapper">
+            <i class="fa-solid fa-angle-left"></i>
+            <div class="explore-carousel">
+              <div class="explore-card">
+                <img src="../assets/img/bali-carousel.jpg" alt="" />
+                <div class="card-content">
+                  <h3>Card Title</h3>
+                  <p>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                  </p>
+                  <div class="card-footer">
+                    <img src="../assets/img/trav.png" alt="" />
+                    <span>Source Name</span>
+                  </div>
+                </div>
+              </div>
+              <div class="explore-card">
+                <img src="../assets/img/bali-carousel.jpg" alt="" />
+                <div class="card-content">
+                  <h3>Card Title</h3>
+                  <p>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                  </p>
+                  <div class="card-footer">
+                    <img src="../assets/img/trav.png" alt="" />
+                    <span>Source Name</span>
+                  </div>
+                </div>
+              </div>
+              <div class="explore-card">
+                <img src="../assets/img/bali-carousel.jpg" alt="" />
+                <div class="card-content">
+                  <h3>Card Title</h3>
+                  <p>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                  </p>
+                  <div class="card-footer">
+                    <img src="../assets/img/trav.png" alt="" />
+                    <span>Source Name</span>
+                  </div>
+                </div>
+              </div>
+              <div class="explore-card">
+                <img src="../assets/img/bali-carousel.jpg" alt="" />
+                <div class="card-content">
+                  <h3>Card Title</h3>
+                  <p>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                  </p>
+                  <div class="card-footer">
+                    <img src="../assets/img/trav.png" alt="" />
+                    <span>Source Name</span>
+                  </div>
+                </div>
+              </div>
+              <div class="explore-card">
+                <img src="../assets/img/bali-carousel.jpg" alt="" />
+                <div class="card-content">
+                  <h3>Card Title</h3>
+                  <p>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                  </p>
+                  <div class="card-footer">
+                    <img src="../assets/img/trav.png" alt="" />
+                    <span>Source Name</span>
+                  </div>
+                </div>
+              </div>
+              <div class="explore-card">
+                <img src="../assets/img/bali-carousel.jpg" alt="" />
+                <div class="card-content">
+                  <h3>Card Title</h3>
+                  <p>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                  </p>
+                  <div class="card-footer">
+                    <img src="../assets/img/trav.png" alt="" />
+                    <span>Source Name</span>
+                  </div>
+                </div>
+              </div>
+              <div class="explore-card">
+                <img src="../assets/img/bali-carousel.jpg" alt="" />
+                <div class="card-content">
+                  <h3>Card Title</h3>
+                  <p>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                  </p>
+                  <div class="card-footer">
+                    <img src="../assets/img/trav.png" alt="" />
+                    <span>Source Name</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <i class="fa-solid fa-angle-right"></i>
+          </div>
+        </div>
+
+        <!-- Itinerary -->
+        <div class="main-padding" id="itinerary">
+          <h1>Itinerary</h1>
+          <div class="date-picker">
+            <i class="fa-regular fa-calendar-alt"></i>
+            <input type="text" name="datefilter" value="" />
+            <script type="text/javascript">
+              $(function () {
+                $('input[name="datefilter"]').daterangepicker({
+                  autoUpdateInput: false,
+                  locale: {
+                    cancelLabel: "Clear",
+                  },
+                });
+
+                $('input[name="datefilter"]').on(
+                  "apply.daterangepicker",
+                  function (ev, picker) {
+                    $(this).val(
+                      picker.startDate.format("MM/DD") +
+                        " - " +
+                        picker.endDate.format("MM/DD")
+                    );
+                  }
+                );
+
+                $('input[name="datefilter"]').on(
+                  "cancel.daterangepicker",
+                  function (ev, picker) {
+                    $(this).val("");
+                  }
+                );
+              });
+            </script>
+          </div>
+          <div class="itinerary-details-day">
+            <div class="itinerary-date">
+              <h2>Saturday, 1 April</h2>
+            </div>
+            <div class="itinerary-card-container">
+              <div class="itinerary-card">
+                <div class="marker">
+                  <i class="fas fa-location-pin"></i>
+                  <span class="num">1</span>
+                </div>
+                <div class="itinerary-card-info">
+                  <h3>Nusa Penida</h3>
+                  <textarea
+                    name="text"
+                    rows="14"
+                    cols="10"
+                    wrap="soft"
+                    placeholder="Add notes here"
+                  ></textarea>
+                  <div class="card-utils">
+                    <div
+                      class="add-time utils"
+                      onclick="openSetTimeOverlay(this.parentElement.parentElement)"
+                    >
+                      <i class="far fa-clock"></i>
+                      <span>Set Time</span>
+                    </div>
+                    <div
+                      class="add-expense utils"
+                      onclick="openExpenseOverlay(this.parentElement.parentElement)"
+                    >
+                      <i class="far fa-money-bill-alt"></i>
+                      <span class = "expense-val">Set Expense</span>
+                      <span class = "expense-type"></span>
+                    </div>
+                  </div>
+                </div>
+                <img src="../assets/img/penida.jpeg" alt="" />
+                <!-- Delete Button -->
+                <div class="delete-btn">
+                  <i class="fas fa-trash-alt"></i>
+                </div>
+              </div>
+            </div>
+            <!-- Search Place Bar -->
+            <div class="search-place">
+              <input type="text" placeholder="Search Place" />
+              <i class="fas fa-search"></i>
+            </div>
+            <!-- Reccomendation -->
+            <div class="recommendation">
+              <span>Recommended Places</span>
+              <div class="recommendation-carousel-wrapper">
+                <i class="fa-solid fa-angle-left nav-prev nav-button"></i>
+                <div class="recommendation-carousel">
+                  <div class="recommendation-card">
+                    <img src="../assets/img/angel's-billabong.jpg" alt="" />
+                    <p class="spot-name">Angel's Billabong</p>
+                    <i class="fas fa-add add-btn"></i>
+                  </div>
+                  <div class="recommendation-card">
+                    <img src="../assets/img/angel's-billabong.jpg" alt="" />
+                    <p class="spot-name">Angel's Billabong</p>
+                    <i class="fas fa-add add-btn"></i>
+                  </div>
+                  <div class="recommendation-card">
+                    <img src="../assets/img/angel's-billabong.jpg" alt="" />
+                    <p class="spot-name">Angel's Billabong</p>
+                    <i class="fas fa-add add-btn"></i>
+                  </div>
+                  <div class="recommendation-card">
+                    <img src="../assets/img/angel's-billabong.jpg" alt="" />
+                    <p class="spot-name">Angel's Billabong</p>
+                    <i class="fas fa-add add-btn"></i>
+                  </div>
+                </div>
+                <i class="fa-solid fa-angle-right nav-next nav-button"></i>
+              </div>
+            </div>
+          </div>
+          <div class="day-separator"></div>
+          <div class="itinerary-details-day">
+            <div class="itinerary-date">
+              <h2>Monday, 2 April</h2>
+            </div>
+            <div class="itinerary-card-container">
+              <div class="itinerary-card">
+                <div class="marker">
+                  <i class="fas fa-location-pin"></i>
+                  <span class="num">1</span>
+                </div>
+                <div class="itinerary-card-info">
+                  <h3>Nusa Penida</h3>
+                  <textarea
+                    name="text"
+                    rows="14"
+                    cols="10"
+                    wrap="soft"
+                    placeholder="Add notes here"
+                  ></textarea>
+                  <div class="card-utils">
+                    <div
+                      class="add-time utils"
+                      onclick="openSetTimeOverlay(this.parentElement.parentElement)"
+                    >
+                      <i class="far fa-clock"></i>
+                      <span>Set Time</span>
+                    </div>
+                    <div
+                      class="add-expense utils"
+                      onclick="openExpenseOverlay(this.parentElement.parentElement)"
+                    >
+                      <i class="far fa-money-bill-alt"></i>
+                      <span>Set Expense</span>
+                    </div>
+                  </div>
+                </div>
+                <img src="../assets/img/penida.jpeg" alt="" />
+                <!-- Delete Button -->
+                <div class="delete-btn">
+                  <i class="fas fa-trash-alt"></i>
+                </div>
+              </div>
+            </div>
+            <!-- Search Place Bar -->
+            <div class="search-place">
+              <input type="text" placeholder="Search Place" />
+              <i class="fas fa-search"></i>
+            </div>
+            <!-- Reccomendation -->
+            <div class="recommendation">
+              <span>Recommended Places</span>
+              <div class="recommendation-carousel-wrapper">
+                <i class="fa-solid fa-angle-left nav-prev nav-button"></i>
+                <div class="recommendation-carousel">
+                  <div class="recommendation-card">
+                    <img src="../assets/img/angel's-billabong.jpg" alt="" />
+                    <p class="spot-name">Angel's Billabong</p>
+                    <i class="fas fa-add add-btn"></i>
+                  </div>
+                  <div class="recommendation-card">
+                    <img src="../assets/img/angel's-billabong.jpg" alt="" />
+                    <p class="spot-name">Angel's Billabong</p>
+                    <i class="fas fa-add add-btn"></i>
+                  </div>
+                  <div class="recommendation-card">
+                    <img src="../assets/img/angel's-billabong.jpg" alt="" />
+                    <p class="spot-name">Angel's Billabong</p>
+                    <i class="fas fa-add add-btn"></i>
+                  </div>
+                  <div class="recommendation-card">
+                    <img src="../assets/img/angel's-billabong.jpg" alt="" />
+                    <p class="spot-name">Angel's Billabong</p>
+                    <i class="fas fa-add add-btn"></i>
+                  </div>
+                </div>
+                <i class="fa-solid fa-angle-right nav-next nav-button"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Budget -->
+        <div class="main-padding" id="budget">
+          <h1>Budgeting</h1>
+          <h2><br>Budget</h2>
+          <div class="budget-header">
+            <div class="budget-val">
+              <span>IDR 5,000,000.00</span>
+            </div>
+            <div class="budget-separator"></div>
+            <div class="budget-utils">
+              <button class="set-budget">
+                <i class="fas fa-pen"></i>
+                <span>Set Budget</span>
+              </button>
+              <button class="budget-options">
+                <i class="fas fa-cog"></i>
+                <span>Options</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="expenses">
+            <div class="expenses-head-row">
+              <h2>Expenses</h2>
+              <div class="sort-by">
+                <span>Sort by: </span>
+                <select name="sort-by" id="sort-by">
+                  <option value="date">Date</option>
+                  <option value="type">Type</option>
+                  <option value="price">Price</option>
+                </select>
+              </div>
+            </div>
+            <div class="budget-header">
+              <div class="budget-val">
+                <span>IDR 2,550,000.00</span>
+              </div>
+              <div class="budget-separator"></div>
+              <div class="budget-utils">
+                <button class="debt-summary">
+                  <i class="fas fa-money-bill"></i>
+                  <span>Debt Summary</span>
+                </button>
+                <button class="expense-options">
+                  <i class="fas fa-cog"></i>
+                  <span>Option</span>
+                </button>
+              </div>
+            </div>
+            <ul>
+              <li>
+                <div class="expense-item">
+                  <div class="expense-item-icon">
+                    <i class="fas fa-utensils"></i>
+                  </div>
+                  <div class="expense-info">
+                    <div class="expense-item-name">Nusa Penida</div>
+                    <div class="expense-item-desc">
+                      <div class="expense-item-desc-date">4/1</div>
+                      <i class="fas fa-circle"></i>
+                      <div class="expense-item-desc-type">Foods</div>
+                    </div>
+                  </div>
+                  <div class="expense-item-price">
+                    <span>IDR 1,000,000.00</span>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="expense-item">
+                  <div class="expense-item-icon">
+                    <i class="fas fa-utensils"></i>
+                  </div>
+                  <div class="expense-info">
+                    <div class="expense-item-name">Nusa Penida</div>
+                    <div class="expense-item-desc">
+                      <div class="expense-item-desc-date">4/1</div>
+                      <i class="fas fa-circle"></i>
+                      <div class="expense-item-desc-type">Foods</div>
+                    </div>
+                  </div>
+                  <div class="expense-item-price">
+                    <span>IDR 250,000.00</span>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="expense-item">
+                  <div class="expense-item-icon">
+                    <i class="fas fa-utensils"></i>
+                  </div>
+                  <div class="expense-info">
+                    <div class="expense-item-name">Nusa Penida</div>
+                    <div class="expense-item-desc">
+                      <div class="expense-item-desc-date">4/1</div>
+                      <i class="fas fa-circle"></i>
+                      <div class="expense-item-desc-type">Foods</div>
+                    </div>
+                  </div>
+                  <div class="expense-item-price">
+                    <span>IDR 300,000.00</span>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="expense-item">
+                  <div class="expense-item-icon">
+                    <i class="fas fa-utensils"></i>
+                  </div>
+                  <div class="expense-info">
+                    <div class="expense-item-name">Nusa Penida</div>
+                    <div class="expense-item-desc">
+                      <div class="expense-item-desc-date">4/1</div>
+                      <i class="fas fa-circle"></i>
+                      <div class="expense-item-desc-type">Foods</div>
+                    </div>
+                  </div>
+                  <div class="expense-item-price">
+                    <span>IDR 500,000.00</span>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Map -->
+      <div id="map">
+        <img src="../assets/img/bali_map.png" alt="" />
+      </div>
+
+      <!-- Overlays -->
+      <!-- Add Expense Overlay -->
+      <div class="overlay" id="expenseOverlay">
+        <div class="overlay-content">
+          <h3>Set Expense</h3>
+          <div class="expense-set">
+            <div class="currency">IDR</div>
+            <input
+              type="number"
+              id="expenseInput"
+              placeholder="Expense amount"
+            />
+          </div>
+          <div class="expense-set">
+            <i class="fas fa-burger"></i>
+            <select id="expenseType">
+              <option value="food">Food</option>
+              <option value="activities">Activities</option>
+              <option value="hotel">Hotel</option>
+            </select>
+          </div>
+          <div class="button-container">
+            <button class="cancel-button" onclick="closeExpenseOverlay()">
+              Cancel
+            </button>
+            <button class="set-button" onclick="setExpense()">
+              Set Expense
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- Set Time Overlay -->
+      <div class="overlay" id="setTimeOverlay">
+        <div class="overlay-content">
+          <h3>Set Time</h3>
+          <div class="time-set">
+            <div class="time-set-item">
+              <label for="startTime">Start</label>
+              <input type="time" id="startTime" />
+            </div>
+            <div class="time-set-item">
+              <label for="endTime">End</label>
+              <input type="time" id="endTime" />
+            </div>
+          </div>
+          <div class="button-container">
+            <button class="cancel-button" onclick="closeSetTimeOverlay()">
+              Cancel
+            </button>
+            <button class="set-button" onclick="setTime()">Set Time</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../JS/travel_plan.js"></script>
+    <script src="../JS/chatbot_client.js"></script>
+  </body>
+</html>

@@ -1,0 +1,25 @@
+Pembagian Tugas:
+James:
+- Rancangan Desain Produk (features, design ideas)
+- Planning Page Figma
+- Website Planning Page & Chatbot (HTML, CSS, JS)
+
+David:
+-Landing Page Figma
+-Landing Page  (HTML, CSS)
+-Detail Page (HTML)
+
+Faris:
+-Landing Page Figma
+-Landing Page  (HTML, CSS)
+-Detail Page (CSS)
+
+Kevin:
+-Detail Page Figma
+
+Link Figma
+https://www.figma.com/file/SMTb2lX8ssBbRT0SIouJ74/Tugas-Kelompok?type=design&node-id=0%3A1&t=GKKfYWvvyZe4Crnf-1
+
+NOTES:
+1. DetailPage belum sempat disambungkan ke page lain, bisa dibuka secara terpisah
+2. Beberapa design dan feature yang tidak sesuai di Figma karena langsung dituangkan / diubah di website akibat keterbatasan waktu :)
